@@ -1,0 +1,18 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Support\Facades\DB;
+
+final class {{ class }}
+{
+    /**
+     * Execute the action.
+     */
+    public function handle(): void
+    {
+        DB::transaction(function (): void {
+            //
+        });
+    }
+}
