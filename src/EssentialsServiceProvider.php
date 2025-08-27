@@ -3,7 +3,9 @@
 namespace Kyledoesdev\Essentials;
 
 use Kyledoesdev\Essentials\Commands\MakeActionCommand;
+use Kyledoesdev\Essentials\Commands\PublishStubsCommand;
 use Kyledoesdev\Essentials\Providers\MacroServiceProvider;
+use Kyledoesdev\Essentials\Services\PublishStubsService;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -27,7 +29,40 @@ class EssentialsServiceProvider extends PackageServiceProvider
             ->name('essentials')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_essentials_table')
-            ->hasCommand(MakeActionCommand::class);
+            ->hasMigrations([
+                'create_users_table'
+            ])
+            ->hasCommands([
+                MakeActionCommand::class,
+                PublishStubsCommand::class,
+            ]);
+    }
+
+    public function packageBooted()
+    {
+        if ($this->app->runningInConsole()) {
+            $publisher = new PublishStubsService;
+        
+            // Register all publishables
+            $this->publishes(
+                $publisher->getPublishableFiles(),
+                'essentials'
+            );
+            
+            $this->publishes(
+                $publisher->getPublishableFiles('models'),
+                'essentials-models'
+            );
+            
+            $this->publishes(
+                $publisher->getPublishableFiles('filament'),
+                'essentials-filament'
+            );
+                        
+            $this->publishes(
+                $publisher->getPublishableFiles('stubs'),
+                'essentials-stubs'
+            );
+        }
     }
 }
