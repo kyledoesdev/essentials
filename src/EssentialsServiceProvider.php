@@ -37,32 +37,4 @@ class EssentialsServiceProvider extends PackageServiceProvider
                 PublishStubsCommand::class,
             ]);
     }
-
-    public function packageBooted()
-    {
-        if ($this->app->runningInConsole()) {
-            $publisher = new PublishStubsService;
-        
-            // Register all publishables
-            $this->publishes(
-                $publisher->getPublishableFiles(),
-                'essentials'
-            );
-            
-            $this->publishes(
-                $publisher->getPublishableFiles('models'),
-                'essentials-models'
-            );
-            
-            $this->publishes(
-                $publisher->getPublishableFiles('filament'),
-                'essentials-filament'
-            );
-                        
-            $this->publishes(
-                $publisher->getPublishableFiles('stubs'),
-                'essentials-stubs'
-            );
-        }
-    }
 }

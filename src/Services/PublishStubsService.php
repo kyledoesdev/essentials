@@ -20,7 +20,7 @@ final class PublishStubsService
     {
         $this->publishableFiles = [];
         
-        if (!$tag || in_array($tag, ['stubs', 'models', 'filament'])) {
+        if (!$tag || in_array($tag, ['models', 'filament'])) {
             $this->collectStubFiles($tag);
         }
         
@@ -82,31 +82,53 @@ final class PublishStubsService
     {
         $stubsPath = $this->packagePath . '/stubs';
 
-        $searchPath = $stubsPath . ($tag === 'models' ? '/Models' : ($tag === 'filament' ? '/Filament' : ''));
-
-        if (! File::exists($stubsPath) || ($tag && ! File::exists($searchPath))) {
+        if (! File::exists($stubsPath)) {
             return;
         }
+
+        $directories = $tag ? [$stubsPath . '/' . ucfirst($tag)] : File::directories($stubsPath);
         
-        $finder = new Finder();
-        $finder->files()->in($searchPath)->name('*.stub');
-        
-        foreach ($finder as $file) {
-            $relativePath = str_replace($stubsPath . '/', '', $file->getRealPath());
-            $targetPath = str_replace('.stub', '.php', $relativePath);
-            $targetFullPath = app_path($targetPath);
+        foreach ($directories as $directory) {
+            if (! File::exists($directory)) {
+                continue;
+            }
             
-            $this->publishableFiles[$file->getRealPath()] = $targetFullPath;
+            $finder = new Finder();
+            $finder->files()->in($directory)->name('*.stub');
+            
+            foreach ($finder as $file) {
+                $filename = $file->getFilename();
+                
+                if ($this->shouldIgnoreStub($filename)) {
+                    continue;
+                }
+                
+                $normalizedStubsPath = str_replace('\\', '/', $stubsPath);
+                $normalizedFilePath = str_replace('\\', '/', $file->getRealPath());
+                
+                $relativePath = str_replace($normalizedStubsPath . '/', '', $normalizedFilePath);
+                $targetPath = str_replace('.php.stub', '.php', $relativePath);
+                $targetFullPath = app_path($targetPath);
+                
+                $this->publishableFiles[$file->getRealPath()] = $targetFullPath;
+            }
         }
     }
                 
     public function getAvailableTags(): array
     {
-        return ['stubs', 'models', 'filament'];
+        return ['models', 'filament'];
     }
 
     private function getRelativePath(string $path): string
     {
         return str_starts_with($path, base_path()) ? ltrim(str_replace(base_path(), '', $path), '/') : $path;
+    }
+
+    private function shouldIgnoreStub(string $filename): bool
+    {        
+        return in_array($filename, [
+            'action.stub',
+        ]);
     }
 }
