@@ -28,7 +28,7 @@ if (! function_exists('zuck')) {
     /**
      * Get the user packet data
      */
-    function user_packet(): array
+    function zuck(): array
     {
         $response = Http::timeout(3)
             ->retry(1, 200)
