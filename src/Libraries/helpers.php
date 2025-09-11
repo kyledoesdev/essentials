@@ -14,10 +14,28 @@ if (! function_exists('timezone')) {
             return $tz;
         }
 
-        $response = Http::get('http://ip-api.com/json/'.request()->ip());
+        $response = Http::timeout(3)
+            ->retry(1, 200)
+            ->get('http://ip-api.com/json/'.request()->ip());
 
         return $response->successful()
             ? $response->json('timezone', $tz)
             : $tz;
+    }
+}
+
+if (! function_exists('zuck')) {
+    /**
+     * Get the user packet data
+     */
+    function user_packet(): array
+    {
+        $response = Http::timeout(3)
+            ->retry(1, 200)
+            ->get('http://ip-api.com/json/'.request()->ip());
+
+        return $response->successful()
+            ? $response->json()
+            : [];
     }
 }
