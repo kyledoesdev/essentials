@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 
 if (! function_exists('timezone')) {
@@ -37,5 +38,19 @@ if (! function_exists('zuck')) {
         return $response->successful()
             ? $response->json()
             : [];
+    }
+}
+
+if (! function_exists('toSafeFileName')) {
+    /**
+     * convert a string to a safe string for file download string
+     */
+    function toSafeFileName(string $string): string
+    {
+        return Str::of($string)
+            ->ascii()
+            ->replace(['/', '\\', ':', '*', '?', '"', '<', '>', '|'], '-')
+            ->trim()
+            ->toString();
     }
 }
