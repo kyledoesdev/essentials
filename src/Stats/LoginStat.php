@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Stats;
+namespace Kyledoesdev\Essentials\Stats;
 
 use Spatie\Stats\BaseStats;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Concerns;
+namespace Kyledoesdev\Essentials\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Stats\Models\StatsEvent;
