@@ -21,6 +21,8 @@ class EssentialsServiceProvider extends PackageServiceProvider
         $package
             ->name('essentials')
             ->hasConfigFile()
+            ->hasMigration('create_stats_events_tables')
+            ->runsMigrations()
             ->hasCommands([
                 MakeActionCommand::class,
             ]);
