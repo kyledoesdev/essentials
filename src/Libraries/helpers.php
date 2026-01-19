@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use Kyledoesdev\Essentials\Services\TimezoneService;
 
 if (! function_exists('timezone')) {
     /**
@@ -9,19 +10,7 @@ if (! function_exists('timezone')) {
      */
     function timezone(): string
     {
-        $tz = config('app.timezone', 'UTC');
-
-        if (in_array(app()->environment(), config('essentials.timezone.local_envs'))) {
-            return $tz;
-        }
-
-        $response = Http::timeout(3)
-            ->retry(1, 200)
-            ->get('http://ip-api.com/json/'.request()->ip());
-
-        return $response->successful()
-            ? $response->json('timezone', $tz)
-            : $tz;
+        return once(fn () => app(TimezoneService::class)->detect());
     }
 }
 
@@ -31,13 +20,10 @@ if (! function_exists('zuck')) {
      */
     function zuck(): array
     {
-        $response = Http::timeout(3)
-            ->retry(1, 200)
-            ->get('http://ip-api.com/json/'.request()->ip());
-
-        return $response->successful()
-            ? $response->json()
-            : [];
+        return rescue(fn () => Http::timeout(3)
+            ->get("http://ip-api.com/json/".  request()->ip())
+            ->json()
+        ) ?? [];
     }
 }
 
