@@ -33,7 +33,7 @@ Generates action classes in `app/Actions` directory.
 ## Requirements
 
 - Laravel 11+
-- PHP 8.4+
+- PHP 8.4 / 8.5
 
 ## License
 MIT license.
