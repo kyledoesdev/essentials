@@ -1,39 +1,42 @@
-# kyledoesdev - Laravel Essentials
+## kyledoesdev/essentials
 
-Essential utilities for my Laravel projects.
+Essential utilities for my Laravel applications — the helpers, macros and generators I'd otherwise copy between projects.
 
-## Installation
+### Installation
 
 ```bash
 composer require kyledoesdev/essentials
 ```
 
-## Features
+### Features
 
-### Global Timezone Helper
+**Timezone detection** — `timezone()` resolves the timezone for the current request from the authenticated user, an IP geo lookup, then `config('app.timezone')`. Results are cached per IP address.
 
-```php
-timezone() // Returns the timezone of the current request()->ip()
-```
+**Carbon macro** — `Carbon::parse($date)->inUserTimezone()` shifts an instance into that timezone.
 
-### Carbon Macro
+**Action generator** — `php artisan make:action CreateUserAction` scaffolds action classes into `app/Actions`.
 
-```php
-Carbon::parse($created_at)->inUserTimezone() // Converts carbon instance to user's timezone
-```
+**Developer middleware** — `IsDeveloper` aborts with a 403 unless the authenticated user has `is_dev`.
 
-### Action Class Generator
+**Model stats** — `HasStatsAfterEvents` records created and deleted counts through spatie/laravel-stats.
+
+**String helpers** — `toSafeFileName()` strips characters that break downloads.
+
+### Configuration
 
 ```bash
-php artisan make:action CreateUserAction
+php artisan vendor:publish --tag=essentials-config
 ```
 
-Generates action classes in `app/Actions` directory.
+### Requirements
 
-## Requirements
-
-- Laravel 11+
+- Laravel 12+
 - PHP 8.4 / 8.5
 
-## License
-MIT license.
+### License
+
+essentials is open-sourced software licensed under the MIT license.
+
+### Credits
+
+Created by [kyledoesdev](https://github.com/kyledoesdev)

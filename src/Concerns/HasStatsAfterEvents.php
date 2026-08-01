@@ -9,7 +9,7 @@ use Spatie\Stats\StatsWriter;
 
 trait HasStatsAfterEvents
 {
-    public static function bootStatsAfterEvents()
+    public static function bootHasStatsAfterEvents()
     {
         static::created(function (Model $model) {
             dispatch(fn() => StatsWriter::for(StatsEvent::class, ['name' => $model::statsClass()])->increase());

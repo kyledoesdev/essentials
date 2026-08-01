@@ -3,22 +3,19 @@
 namespace Kyledoesdev\Essentials\Providers;
 
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\ServiceProvider;
 
 class MacroServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        Carbon::macro('inUserTimezone', function () {
-            $timezone = auth()->user()?->timezone ?? session()->get('____tz');
+        $this->bootCarbonMacros();
+    }
 
-            if (is_null($timezone)) {
-                $timezone = timezone();
-
-                session()->put(['____tz' => $timezone]);
-            }
-
-            return $this->tz($timezone);
-        });
+    private function bootCarbonMacros(): void
+    {
+        Carbon::macro('inUserTimezone', fn () => $this->tz(timezone()));
+        CarbonImmutable::macro('inUserTimezone', fn () => $this->tz(timezone()));
     }
 }
