@@ -10,9 +10,7 @@ class IsDeveloper
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && ! auth()->user()->is_dev) {
-            abort(403);
-        }
+        abort_unless(auth()->user()?->is_dev, 403);
 
         return $next($request);
     }

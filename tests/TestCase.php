@@ -25,5 +25,6 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
         config()->set('app.timezone', 'UTC');
+        config()->set('cache.default', 'array');
     }
 }
