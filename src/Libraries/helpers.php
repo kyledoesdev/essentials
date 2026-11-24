@@ -21,7 +21,7 @@ if (! function_exists('zuck')) {
     function zuck(): array
     {
         return rescue(fn () => Http::timeout(3)
-            ->get("http://ip-api.com/json/".  request()->ip())
+            ->get('http://ip-api.com/json/'.request()->ip())
             ->json()
         ) ?? [];
     }
