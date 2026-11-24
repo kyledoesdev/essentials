@@ -9,3 +9,4 @@ All notable changes to `essentials` will be documented in this file.
 - Require PHP 8.5 and drop the PHP 8.4 CI jobs
 - Allow Pest 4 or 5, so Laravel 12 tests on Pest 4 and Laravel 13 on Pest 5
 - Upgrade `actions/checkout` to v7
+- Fix legacy timezone names like `US/Eastern` falling back to an IP lookup on servers without `tzdata-legacy` (Ubuntu 24.04 and newer). They now map to the current name through `intl`
