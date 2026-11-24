@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 beforeEach(fn () => cleanup());
 afterEach(fn () => cleanup());
 
-describe('Action Command', function() {
+describe('Action Command', function () {
     test('creates a new action file', function (): void {
         $actionName = 'CreateUserAction';
         $exitCode = Artisan::call('make:action', ['name' => $actionName]);

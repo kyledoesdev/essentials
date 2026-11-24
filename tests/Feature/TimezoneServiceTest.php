@@ -103,7 +103,7 @@ describe('TimezoneService user timezone', function () {
     it('accepts a legacy timezone identifier stored on the user', function () {
         actingAsUserWithTimezone('US/Eastern');
 
-        expect((new TimezoneService)->detect())->toBe('US/Eastern');
+        expect((new TimezoneService)->detect())->toBeIn(['US/Eastern', 'America/New_York']);
 
         Http::assertNothingSent();
     });

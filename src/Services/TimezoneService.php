@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use IntlTimeZone;
 
 final class TimezoneService
 {
@@ -72,11 +73,40 @@ final class TimezoneService
             default => $timezone,
         };
 
+        if (blank($timezone)) {
+            return null;
+        }
+
+        return $this->identifier($timezone) ?? $this->identifier($this->canonical($timezone));
+    }
+
+    private function identifier(?string $timezone): ?string
+    {
+        if (blank($timezone)) {
+            return null;
+        }
+
         try {
-            return (new DateTimeZone((string) $timezone))->getName();
+            return (new DateTimeZone($timezone))->getName();
         } catch (Exception) {
             return null;
         }
+    }
+
+    /**
+     * Legacy names like US/Eastern only work when the server has the
+     * tzdata-legacy package, which Ubuntu no longer installs by default.
+     * ICU ships its own data, so it can map them to a current name.
+     */
+    private function canonical(string $timezone): ?string
+    {
+        if (! class_exists(IntlTimeZone::class)) {
+            return null;
+        }
+
+        $canonical = IntlTimeZone::getCanonicalID($timezone);
+
+        return is_string($canonical) && $canonical !== $timezone ? $canonical : null;
     }
 
     private function fallback(): string
