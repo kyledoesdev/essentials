@@ -6,4 +6,6 @@ All notable changes to `essentials` will be documented in this file.
 
 - Add `essentials:backup-database`: dumps, gzips and uploads the database to S3 under `{directory}/{timestamp}/{database}.sql.gz`, deletes backups older than the retention window and logs the result. Schedules itself from `essentials.db_backups` when enabled
 - Require `illuminate/console`, `illuminate/filesystem`, `illuminate/process` and `league/flysystem-aws-s3-v3`
-- Upgrade Pest to v5 and `actions/checkout` to v7
+- Require PHP 8.5 and drop the PHP 8.4 CI jobs
+- Allow Pest 4 or 5, so Laravel 12 tests on Pest 4 and Laravel 13 on Pest 5
+- Upgrade `actions/checkout` to v7

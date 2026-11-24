@@ -45,7 +45,7 @@ php artisan vendor:publish --tag=essentials-config
 ### Requirements
 
 - Laravel 12+
-- PHP 8.4 / 8.5
+- PHP 8.5+
 
 ### License
 
